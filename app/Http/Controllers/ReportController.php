@@ -14,8 +14,7 @@ class ReportController extends Controller
         $stockLines = DB::table('stocks')->where('stock_qty','>',0)->count();
         $partNgQty = (float) DB::table('part_ngs')->sum('qty_ng');
         $lastSto = DB::table('stock_opnames')->orderByDesc('sto_date')->orderByDesc('sto_id')->first();
-        $mccPending = DB::table('mini_cycle_counts')->where('approval_status','pending')->count();
-        return view('reports.index', compact('movementCount','stockLines','partNgQty','lastSto','mccPending'));
+        return view('reports.index', compact('movementCount','stockLines','partNgQty','lastSto'));
     }
 
     public function export(string $type): StreamedResponse

@@ -98,9 +98,6 @@ class MonitoringController extends Controller
                 ->where('sd.sto_id',$latestSto->sto_id)->where('sd.match_status','mismatch')
                 ->orderByDesc('sd.gap_quantity')->get(['sd.*','p.part_number','p.part_name']);
         }
-        $mccRows = DB::table('mini_cycle_count_details as d')->join('mini_cycle_counts as c','c.mcc_id','=','d.mcc_id')
-            ->join('parts as p','p.part_id','=','d.part_id')->where('d.match_status','mismatch')
-            ->orderByDesc('c.count_date')->limit(50)->get(['d.*','c.count_date','c.approval_status','p.part_number','p.part_name']);
-        return view('monitoring.discrepancies', compact('latestSto','stoRows','mccRows'));
+        return view('monitoring.discrepancies', compact('latestSto','stoRows'));
     }
 }

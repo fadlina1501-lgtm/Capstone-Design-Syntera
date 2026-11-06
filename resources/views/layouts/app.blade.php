@@ -69,14 +69,11 @@
                         @if($management || $delivery)
                             <a class="nav-link {{ $active('transactions.delivery') }}" href="{{ route('transactions.delivery') }}"><span class="nav-ico">↑</span>Delivery</a>
                         @endif
-                        @if($management)
-                            <a class="nav-link {{ $active('transactions.index') }}" href="{{ route('transactions.index') }}"><span class="nav-ico">≋</span>Riwayat Transaksi</a>
-                        @endif
                     </div>
                 </section>
             @endif
 
-            @php $inventoryExpanded = request()->routeIs('monitoring.stocks', 'monitoring.movements', 'monitoring.discrepancies', 'mini-cycle-counts.*', 'stock-opnames.*'); @endphp
+            @php $inventoryExpanded = request()->routeIs('monitoring.stocks', 'monitoring.movements', 'monitoring.discrepancies', 'stock-opnames.*'); @endphp
             <section class="nav-group {{ $inventoryExpanded ? 'is-open has-current' : '' }}">
                 <button class="nav-group-toggle {{ $inventoryExpanded ? 'is-current' : '' }}" type="button" data-nav-toggle aria-expanded="{{ $inventoryExpanded ? 'true' : 'false' }}" aria-controls="nav-group-inventory">
                     <span>Monitoring Persediaan</span><span class="nav-group-chevron" aria-hidden="true">⌄</span>
@@ -86,9 +83,6 @@
                     <a class="nav-link {{ $active('monitoring.movements') }}" href="{{ route('monitoring.movements') }}"><span class="nav-ico">↔</span>Stock Movement</a>
                     @if($management || $warehouse || $assembly || $delivery)
                         <a class="nav-link {{ $active('monitoring.discrepancies') }}" href="{{ route('monitoring.discrepancies') }}"><span class="nav-ico">!</span>Discrepancy</a>
-                    @endif
-                    @if($management || $warehouse || $assembly || $delivery)
-                        <a class="nav-link {{ $active('mini-cycle-counts.*') }}" href="{{ route('mini-cycle-counts.index') }}"><span class="nav-ico">✓</span>Mini Cycle Count</a>
                     @endif
                     @if($management)
                         <a class="nav-link {{ $active('stock-opnames.*') }}" href="{{ route('stock-opnames.index') }}"><span class="nav-ico">▤</span>Stock Opname</a>

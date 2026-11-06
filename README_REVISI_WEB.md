@@ -15,11 +15,11 @@ Proyek Laravel ini direvisi dengan menjadikan dokumen dan diagram Capstone sebag
 ## 2. Hak akses
 
 - Staf Administrasi: mengelola Master Data; melihat data transaksi; monitoring; Daily Production; Stock Opname; notifikasi; dan Reports.
-- Operator Warehouse: mencatat Incoming Warehouse dan Incoming Rack; melihat monitoring; membuat Mini Cycle Count; melihat notifikasi.
-- Dandori: melihat Production Plan; melakukan persiapan material dan membuat Part Tag; melihat monitoring dan notifikasi.
-- Operator Assembly: mencatat Assembly dan Part NG secara terpisah; melihat Production Plan dan monitoring; dapat membuat Mini Cycle Count.
-- Operator Delivery: mencatat Delivery dan perpindahan ke Loading Area; melihat Production Plan dan monitoring; dapat membuat Mini Cycle Count.
-- Atasan: melihat Master Data dan transaksi; memantau persediaan/produksi; meninjau hasil, merevisi nilai Stock Actual bila diperlukan, lalu menyetujui Mini Cycle Count; melihat Reports dan notifikasi.
+- Operator Warehouse: mencatat Incoming Warehouse dan Incoming Rack; melihat monitoring persediaan dan notifikasi.
+- Dandori: melihat Production Plan; melakukan persiapan material dan membuat Part Tag; melihat Stock Monitoring, Stock Movement, dan notifikasi.
+- Operator Assembly: mencatat Assembly dan Part NG secara terpisah; melihat Production Plan dan monitoring persediaan.
+- Operator Delivery: mencatat Delivery dan perpindahan ke Loading Area; melihat Production Plan dan monitoring persediaan.
+- Atasan: melihat Master Data dan transaksi; memantau persediaan/produksi; mengakses Stock Opname, Reports, dan notifikasi.
 
 Admin dan Atasan hanya mendapat tampilan baca-saja pada halaman transaksi. Aksi simpan transaksi dibatasi pada role operasional.
 
@@ -52,7 +52,7 @@ Jika paket diekstrak tanpa folder `vendor`, jalankan `composer install`. Jika fo
 
 ## 4. Akun demo
 
-Semua akun demo menggunakan password `Capstone123!`.
+Untuk pengujian lokal, akun demo menggunakan password `Capstone123!` secara default. Pada Laravel Cloud/production, password akun demo wajib ditentukan melalui Secret `DEMO_USER_PASSWORD` (minimal 12 karakter); jangan memakai password contoh untuk penggunaan publik.
 
 | Role | Username |
 |---|---|
@@ -72,11 +72,11 @@ Ganti password dan konfigurasi keamanan sebelum penggunaan selain pengujian prot
 3. Buka aplikasi laptop melalui `http://127.0.0.1:8000`, login sebagai Operator Warehouse, lalu buka Incoming Warehouse.
 4. Klik **Hubungkan HP untuk Scan**. Buka URL HTTPS pada HP, lalu tekan **Mulai Kamera**.
 5. Di laptop, tampilkan salah satu gambar QR di folder `sample-supplier-qr`. Pindai QR dari layar laptop menggunakan HP.
-6. Informasi barcode/part/supplier/quantity/PO/tanggal/urutan box/shelf akan diisikan ke form Incoming Warehouse. Periksa datanya dan klik **Simpan Penerimaan**.
+6. Informasi barcode/part/supplier/quantity/PO/tanggal/urutan box/shelf akan diisikan ke form Incoming Warehouse pada laptop. Periksa data di laptop, lalu tekan tombol **Submit Transaksi dari HP** pada halaman scanner HP. HP mengirim perintah submit ke laptop; Laravel tetap memvalidasi dan menyimpan form transaksi yang sama.
 7. Pada Incoming Rack, pindai barcode box yang sama, lalu catat perpindahannya.
 8. Di Dandori, pilih Production Plan, masukkan kuantitas FG, dan pindai barcode supplier box komponen sesuai BOM. Sistem hanya menerima part yang dibutuhkan BOM dan box yang berada di Incoming Rack atau sisa box yang sah di Dandori.
 9. Setelah persiapan berhasil, buka/print Part Tag. Di Assembly, pindai Part Tag tersebut dan catat qty FG produced. Pencatatan Part NG dilakukan di menu Part NG.
-10. Di Delivery, pilih tanggal Production Plan, pindai Part Tag untuk mencatat Outgoing Area, lalu klik aksi pindah ke Loading Area pada baris produk yang sudah berada di Outgoing Area.
+10. Di Delivery, pilih tanggal Production Plan, pindai Part Tag untuk mencatat Outgoing Area, lalu gunakan aksi pindah ke Loading Area pada baris produk yang sudah berada di Outgoing Area. Untuk transaksi yang menggunakan scanner pairing, perintah submit dapat dikirim dari tombol **Submit Transaksi dari HP**.
 
 Folder `sample-supplier-qr` berisi QR demo fiktif dan payload yang dibaca scanner. QR demo ini **bukan** QR aktual pemasok perusahaan. Untuk QR supplier aktual, format payload perlu dipetakan berdasarkan hasil scan QR aslinya.
 
@@ -104,3 +104,12 @@ Empat box tersebut mewakili `HF-HND-630` (1 unit), `CM-AST-401` (1 unit), `CM-CV
 ## 7. Batasan pengujian
 
 Fungsi transaksi mengikuti alur TO-BE pada prototype. Pengujian scanner HP tetap membutuhkan koneksi HTTPS (misalnya tunnel ngrok), izin kamera browser, dan koneksi internet yang dapat mengakses tunnel. Ketersediaan kamera/izin browser dan jaringan harus diuji pada perangkat yang digunakan.
+
+
+## 8. Perubahan versi deployment
+
+- Menu dan route Mini Cycle Count dinonaktifkan dari aplikasi. Tabel lama tetap ada pada skema database untuk menjaga kompatibilitas dan menghindari penghapusan data secara tidak sengaja.
+- Menu dan route Riwayat Transaksi keseluruhan dihapus. Monitoring Stock Movement tetap tersedia sesuai kebutuhan monitoring aliran material.
+- Part Tag Dandori sekarang menampilkan QR Code lokal (tanpa CDN) yang berisi nilai `tag_code`; QR dapat dipindai pada proses Assembly dan Delivery.
+- `bootstrap/cache/.gitignore` disertakan agar direktori cache tetap ada saat source diambil Laravel Cloud dari Git.
+- Gunakan `.env.example` sebagai template lokal. Jangan commit `.env`.

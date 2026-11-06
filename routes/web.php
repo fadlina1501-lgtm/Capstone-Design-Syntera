@@ -6,7 +6,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DandoriController;
 use App\Http\Controllers\MasterDataController;
 use App\Http\Controllers\MaterialMovementController;
-use App\Http\Controllers\MiniCycleCountController;
 use App\Http\Controllers\MonitoringController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PartNgController;
@@ -72,9 +71,6 @@ Route::middleware('auth')->group(function () {
 
     // Data Transaksi: Admin and Atasan may inspect records; operational roles perform the transaction.
     Route::prefix('transactions')->name('transactions.')->group(function () {
-        Route::get('/', [MaterialMovementController::class, 'index'])
-            ->middleware('role:Staf Administrasi|Atasan')
-            ->name('index');
 
         Route::middleware('role:Staf Administrasi|Atasan|Operator Warehouse')->group(function () {
             Route::get('/incoming-warehouse', [MaterialMovementController::class, 'incomingWarehouse'])->name('incoming-warehouse');
@@ -144,21 +140,6 @@ Route::middleware('auth')->group(function () {
         Route::put('/{id}', [StockOpnameController::class, 'update'])->whereNumber('id')->name('update');
     });
 
-    // Mini Cycle Count: operational roles record counts; Atasan reviews, revises when needed, then approves.
-    Route::middleware('role:Staf Administrasi|Operator Warehouse|Operator Assembly|Operator Delivery|Atasan')
-        ->prefix('mini-cycle-counts')->name('mini-cycle-counts.')->group(function () {
-            Route::get('/', [MiniCycleCountController::class, 'index'])->name('index');
-            Route::get('/{id}', [MiniCycleCountController::class, 'show'])->whereNumber('id')->name('show');
-        });
-    Route::middleware('role:Staf Administrasi|Operator Warehouse|Operator Assembly|Operator Delivery')
-        ->prefix('mini-cycle-counts')->name('mini-cycle-counts.')->group(function () {
-            Route::get('/create', [MiniCycleCountController::class, 'create'])->name('create');
-            Route::post('/', [MiniCycleCountController::class, 'store'])->name('store');
-        });
-    Route::middleware('role:Atasan')->prefix('mini-cycle-counts')->name('mini-cycle-counts.')->group(function () {
-        Route::post('/{id}/revise', [MiniCycleCountController::class, 'revise'])->whereNumber('id')->name('revise');
-        Route::post('/{id}/approve', [MiniCycleCountController::class, 'approve'])->whereNumber('id')->name('approve');
-    });
 
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/{id}/read', [NotificationController::class, 'markRead'])->whereNumber('id')->name('notifications.read');

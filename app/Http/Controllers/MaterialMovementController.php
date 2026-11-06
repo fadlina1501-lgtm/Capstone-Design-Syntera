@@ -18,19 +18,6 @@ class MaterialMovementController extends Controller
 {
     public function __construct(private StockService $stockService) {}
 
-    public function index()
-    {
-        $movements = DB::table('material_movements as mm')
-            ->join('material_boxes as mb', 'mb.box_id', '=', 'mm.box_id')
-            ->join('parts as p', 'p.part_id', '=', 'mb.part_id')
-            ->join('locations as to_l', 'to_l.location_id', '=', 'mm.to_location_id')
-            ->leftJoin('locations as from_l', 'from_l.location_id', '=', 'mm.from_location_id')
-            ->leftJoin('users as u', 'u.user_id', '=', 'mm.user_id')
-            ->orderByDesc('mm.movement_id')
-            ->paginate(20, ['mm.*', 'mb.box_barcode', 'p.part_number', 'p.part_name', 'from_l.location_name as from_location', 'to_l.location_name as to_location', 'u.full_name']);
-
-        return view('transactions.index', compact('movements'));
-    }
 
     public function incomingWarehouse()
     {

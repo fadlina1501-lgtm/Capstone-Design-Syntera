@@ -16,6 +16,11 @@ class StockTrackingSeeder extends Seeder
 {
     public function run(): void
     {
+        $demoPassword = (string) env('DEMO_USER_PASSWORD', 'Capstone123!');
+        if (app()->environment('production') && (! env('DEMO_USER_PASSWORD') || strlen($demoPassword) < 12)) {
+            throw new \RuntimeException('Set DEMO_USER_PASSWORD dengan minimal 12 karakter melalui Laravel Cloud Secrets sebelum menjalankan seeder production.');
+        }
+
         $roleNames = ['Staf Administrasi', 'Operator Warehouse', 'Dandori', 'Operator Assembly', 'Operator Delivery', 'Atasan'];
         $roles = [];
         foreach ($roleNames as $name) {
@@ -36,7 +41,7 @@ class StockTrackingSeeder extends Seeder
                 ['username' => $username],
                 [
                     'role_id' => $roles[$roleName]->role_id,
-                    'password_hash' => Hash::make('Capstone123!'),
+                    'password_hash' => Hash::make($demoPassword),
                     'full_name' => $fullName,
                     'status_account' => 'active',
                     'last_login' => null,
@@ -44,6 +49,6 @@ class StockTrackingSeeder extends Seeder
             );
         }
 
-        $this->command?->info('Akun demo berhasil disiapkan. Password demo: Capstone123!. Tidak ada box/stok awal yang dibuat otomatis; masukkan material melalui Incoming Warehouse agar mengikuti alur TO-BE.');
+        $this->command?->info('Akun demo berhasil disiapkan. Password mengikuti DEMO_USER_PASSWORD pada environment. Tidak ada box/stok awal yang dibuat otomatis; masukkan material melalui Incoming Warehouse agar mengikuti alur TO-BE.');
     }
 }

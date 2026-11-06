@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\MaterialMovement;
-use App\Models\MiniCycleCount;
 use App\Models\Part;
 use App\Models\Stock;
 use App\Models\StockOpname;
@@ -29,7 +28,6 @@ class DashboardController extends Controller
             }
         }
 
-        $pendingCounts = MiniCycleCount::where('approval_status', 'pending')->count();
         $recentMovements = DB::table('material_movements as mm')
             ->join('material_boxes as mb', 'mb.box_id', '=', 'mm.box_id')
             ->join('parts as p', 'p.part_id', '=', 'mb.part_id')
@@ -40,7 +38,6 @@ class DashboardController extends Controller
             ->limit(8)
             ->get(['mm.movement_id','mm.scan_time','mm.movement_type','mm.quantity','mb.box_barcode','p.part_number','p.part_name','from_l.location_name as from_location','to_l.location_name as to_location','u.full_name']);
 
-        $recentCounts = MiniCycleCount::with(['counter','approver'])->orderByDesc('mcc_id')->limit(5)->get();
-        return view('dashboard', compact('partCount','stockQty','todayMovements','latestSto','mismatchCount','accuracy','pendingCounts','recentMovements','recentCounts'));
+        return view('dashboard', compact('partCount','stockQty','todayMovements','latestSto','mismatchCount','accuracy','recentMovements'));
     }
 }

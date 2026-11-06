@@ -12,11 +12,9 @@ Matriks ini mengikuti pembagian enam aktor pada Use Case Diagram dan Activity Di
 | Assembly | Lihat saja | — | — | Catat Assembly / scan Part Tag | — | Lihat saja |
 | Part NG | Lihat saja | — | — | Catat Part NG | — | Lihat saja |
 | Delivery | Lihat saja | — | — | — | Catat Delivery / scan / pindah Loading | Lihat saja |
-| Riwayat Transaksi keseluruhan | Lihat | — | — | — | — | Lihat |
 | Stock Monitoring | Lihat | Lihat | Lihat | Lihat | Lihat | Lihat |
 | Stock Movement | Lihat | Lihat | Lihat | Lihat | Lihat | Lihat |
 | Discrepancy | Lihat | Lihat | — | Lihat | Lihat | Lihat |
-| Mini Cycle Count | Buat / lihat | Buat / lihat | — | Buat / lihat | Buat / lihat | Lihat / revisi / setujui |
 | Stock Opname | Buat / lihat | — | — | — | — | Lihat |
 | Production Plan (operasional) | Kelola melalui Master Data | — | Lihat | Lihat | Lihat | Lihat melalui Master Data |
 | Daily Production | Lihat | — | — | — | — | Lihat |
@@ -32,7 +30,7 @@ Matriks ini mengikuti pembagian enam aktor pada Use Case Diagram dan Activity Di
 2. Login `dandori`: Production Plan → Dandori → scan box komponen sesuai BOM → hasilkan Part Tag.
 3. Login `assembly`: Production Plan → Assembly dengan Part Tag → Part NG jika ada hasil tidak sesuai.
 4. Login `delivery`: Production Plan → Delivery ke Outgoing Area → pindahkan ke Loading Area.
-5. Login `atasan`: periksa Mini Cycle Count, revisi detail mismatch terlebih dahulu, lalu setujui.
-6. Login `admin`: kelola Master Data, lihat transaksi, monitoring, Daily Production, Stock Opname, dan Reports.
+5. Login `atasan`: pantau Stock Monitoring, Stock Movement, Discrepancy, Stock Opname, Daily Production, dan Reports.
+6. Login `admin`: kelola Master Data, lihat data transaksi pada halaman proses, monitoring, Daily Production, Stock Opname, dan Reports.
 
-Semua akun demo menggunakan password `Capstone123!`.
+Untuk lokal, akun demo default menggunakan password `Capstone123!`. Pada production, gunakan secret `DEMO_USER_PASSWORD` yang kuat dan jangan menyimpannya di repository.
