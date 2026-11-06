@@ -1,0 +1,5 @@
+@extends('layouts.app')
+@section('content')
+<div class="page-head"><div><h1>Stock Monitoring</h1><p>Saldo persediaan berdasarkan part dan lokasi proses.</p></div><div class="btn-row"><span class="badge info">Total stock: {{ number_format($totalQty,3) }}</span><a class="btn secondary" href="{{ route('reports.export','stocks') }}">Export CSV</a></div></div>
+<div class="card"><div class="table-wrap"><table><thead><tr><th>Part Number</th><th>Nama Part</th><th>Jenis</th><th>Lokasi</th><th>Stock Qty</th><th>Satuan</th><th>Terakhir Update</th></tr></thead><tbody>@forelse($stocks as $s)<tr><td><strong>{{ $s->part_number }}</strong></td><td>{{ $s->part_name }}</td><td><span class="badge info">{{ $s->part_type }}</span></td><td>{{ $s->location_name }}</td><td>{{ number_format((float)$s->stock_qty,3) }}</td><td>{{ $s->uom_name }}</td><td>{{ $s->last_updated }}</td></tr>@empty<tr><td colspan="7" class="empty">Belum ada saldo persediaan. Catat penerimaan atau movement terlebih dahulu.</td></tr>@endforelse</tbody></table></div><div class="pagination-wrap">{{ $stocks->links() }}</div></div>
+@endsection

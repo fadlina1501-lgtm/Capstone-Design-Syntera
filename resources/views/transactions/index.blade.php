@@ -1,0 +1,5 @@
+@extends('layouts.app')
+@section('content')
+<div class="page-head"><div><h1>Riwayat Transaksi Material</h1><p>Riwayat pencatatan pergerakan material berdasarkan barcode di setiap tahapan proses.</p></div><a class="btn secondary" href="{{ route('monitoring.movements') }}">Filter Movement</a></div>
+<div class="card"><div class="table-wrap"><table><thead><tr><th>ID</th><th>Waktu</th><th>Barcode</th><th>Part</th><th>Aktivitas</th><th>Dari</th><th>Ke</th><th>Jumlah</th><th>Petugas</th></tr></thead><tbody>@forelse($movements as $m)<tr><td>{{ $m->movement_id }}</td><td>{{ $m->scan_time }}</td><td><strong>{{ $m->box_barcode }}</strong></td><td>{{ $m->part_number }}<br><span class="muted">{{ $m->part_name }}</span></td><td><span class="badge info">{{ str_replace('_',' ',$m->movement_type) }}</span></td><td>{{ $m->from_location ?? 'Penerimaan awal' }}</td><td>{{ $m->to_location }}</td><td>{{ number_format((float)$m->quantity,3) }}</td><td>{{ $m->full_name ?? '—' }}</td></tr>@empty<tr><td colspan="9" class="empty">Belum ada data transaksi.</td></tr>@endforelse</tbody></table></div><div class="pagination-wrap">{{ $movements->links() }}</div></div>
+@endsection

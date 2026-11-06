@@ -1,0 +1,7 @@
+@extends('layouts.app')
+@section('content')
+@php($role = auth()->user()->role?->role_name)
+@php($canCreate = in_array($role, ['Staf Administrasi','Operator Warehouse','Operator Assembly','Operator Delivery'], true))
+<div class="page-head"><div><h1>Mini Cycle Count</h1><p>Penghitungan fisik berkala untuk memeriksa kesesuaian persediaan dan menindaklanjuti hasil selisih.</p></div>@if($canCreate)<a class="btn" href="{{ route('mini-cycle-counts.create') }}">+ Buat Mini Cycle Count</a>@endif</div>
+<div class="card"><div class="table-wrap"><table><thead><tr><th>ID</th><th>Tanggal Hitung</th><th>Dihitung Oleh</th><th>Ditinjau / Disetujui Oleh</th><th>Status</th><th>Discrepancy</th><th>Aksi</th></tr></thead><tbody>@forelse($counts as $count)<tr><td><strong>#{{ $count->mcc_id }}</strong></td><td>{{ $count->count_date }}</td><td>{{ $count->counter?->full_name }}</td><td>{{ $count->approver?->full_name ?? '—' }}</td><td><span class="badge {{ $count->approval_status==='approved'?'success':'warning' }}">{{ ucfirst(str_replace('_',' ',$count->approval_status)) }}</span></td><td><span class="badge {{ $count->mismatch_count ? 'danger':'success' }}">{{ $count->mismatch_count }} part</span></td><td><a class="btn secondary small" href="{{ route('mini-cycle-counts.show',$count->mcc_id) }}">Detail</a></td></tr>@empty<tr><td colspan="7" class="empty">Belum ada kegiatan Mini Cycle Count.</td></tr>@endforelse</tbody></table></div><div class="pagination-wrap">{{ $counts->links() }}</div></div>
+@endsection
