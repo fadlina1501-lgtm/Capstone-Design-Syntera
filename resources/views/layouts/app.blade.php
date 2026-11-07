@@ -84,9 +84,7 @@
                     @if($management || $warehouse || $assembly || $delivery)
                         <a class="nav-link {{ $active('monitoring.discrepancies') }}" href="{{ route('monitoring.discrepancies') }}"><span class="nav-ico">!</span>Discrepancy</a>
                     @endif
-                    @if($management)
-                        <a class="nav-link {{ $active('stock-opnames.*') }}" href="{{ route('stock-opnames.index') }}"><span class="nav-ico">▤</span>Stock Opname</a>
-                    @endif
+                    <a class="nav-link {{ $active('stock-opnames.*') }}" href="{{ route('stock-opnames.index') }}"><span class="nav-ico">▤</span>Stock Opname</a>
                 </div>
             </section>
 
@@ -134,7 +132,8 @@
 </div>
 @stack('scripts')
 <script src="{{ asset('js/ui.js') }}" defer></script>
-<script src="{{ asset('js/mobile-barcode-scanner.js') }}" defer></script>
+<script src="{{ asset('js/html5-qrcode.min.js') }}" defer></script>
+<script src="{{ asset('js/camera-barcode-scanner.js') }}" defer></script>
 <script src="{{ asset('js/supplier-qr-autofill.js') }}" defer></script>
 </body>
 </html>
